@@ -1,0 +1,5 @@
+CLASS zsac_cl_bp_product DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zsac_r_product.
+ENDCLASS.
+
+CLASS zsac_cl_bp_product IMPLEMENTATION.
+ENDCLASS.

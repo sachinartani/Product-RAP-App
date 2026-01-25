@@ -1,0 +1,31 @@
+managed implementation in class zsac_cl_bp_product unique;
+strict ( 2 );
+
+define behavior for ZSAC_R_Product alias Product
+persistent table zsac_t_product
+lock master
+authorization master ( instance )
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( numbering : managed, readonly ) ProductUuid;
+
+  field ( readonly ) CreatedBy, CreatedAt, LastChangedBy, LastChangedAt, LocalLastChangedAt;
+
+  mapping for zsac_t_product
+    {
+      ProductUuid        = product_uuid;
+      ProductId          = product_id;
+      MaterialType       = material_type;
+      IndustrySector     = industry_sector;
+      MaterialGroup      = material_group;
+      UnitOfMeasure      = unit_of_measure;
+      CurrencyCode       = currency_code;
+      CreatedBy          = created_by;
+      CreatedAt          = created_at;
+      LastChangedBy      = last_changed_by;
+      LastChangedAt      = last_changed_at;
+      LocalLastChangedAt = local_last_changed_at;
+    }
+}

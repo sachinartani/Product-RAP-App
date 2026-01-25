@@ -1,0 +1,64 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: {
+    typeName: 'Product',
+    typeNamePlural: 'Products',
+    title: { type: #STANDARD, value: 'ProductId' },
+    description: { value: 'MaterialType' }
+  }
+}
+annotate entity zsac_c_product with
+{
+  @UI.facet: [
+    {
+      id:              'Identification',
+      purpose:         #STANDARD,
+      type:            #IDENTIFICATION_REFERENCE,
+      label:           'Product Details',
+      position:        10
+    }
+  ]
+
+  @UI.hidden: true
+  ProductUuid;
+
+  @UI: { lineItem:       [ { position: 10, label: 'Product ID' } ],
+         identification: [ { position: 10, label: 'Product ID' } ],
+         selectionField: [ { position: 10 } ] }
+  ProductId;
+
+  @UI: { lineItem:       [ { position: 20, label: 'Material Type' } ],
+         identification: [ { position: 20, label: 'Material Type' } ],
+         selectionField: [ { position: 20 } ] }
+  MaterialType;
+
+  @UI: { lineItem:       [ { position: 30, label: 'Industry' } ],
+         identification: [ { position: 30, label: 'Industry' } ] }
+  IndustrySector;
+
+  @UI: { lineItem:       [ { position: 40, label: 'Material Group' } ],
+         identification: [ { position: 40, label: 'Material Group' } ] }
+  MaterialGroup;
+
+  @UI: { identification: [ { position: 50, label: 'Base Unit' } ] }
+  UnitOfMeasure;
+
+  @UI: { identification: [ { position: 60, label: 'Currency' } ] }
+  CurrencyCode;
+
+  /* Administrative Data - Usually grouped in a different facet or hidden from main list */
+  @UI.identification: [ { position: 70, label: 'Created By' } ]
+  CreatedBy;
+
+  @UI.identification: [ { position: 80, label: 'Created At' } ]
+  CreatedAt;
+
+  @UI.identification: [ { position: 90, label: 'Last Changed By' } ]
+  LastChangedBy;
+
+  @UI.identification: [ { position: 100, label: 'Last Changed At' } ]
+  LastChangedAt;
+
+  @UI.identification: [ { position: 100, label: 'Local Last Changed At' } ]
+  LocalLastChangedAt;
+}

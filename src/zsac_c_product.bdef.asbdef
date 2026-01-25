@@ -1,0 +1,9 @@
+projection;
+strict ( 2 );
+
+define behavior for zsac_c_product alias Product
+{
+  use create;
+  use update;
+  use delete;
+}

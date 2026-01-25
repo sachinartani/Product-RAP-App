@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service Definition for Product'
+define service Zsac_ui_product {
+  expose zsac_c_product as Product;
+}
