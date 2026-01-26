@@ -17,5 +17,8 @@ define root view entity zsac_c_product
       CreatedAt,
       LastChangedBy,
       LastChangedAt,
-      LocalLastChangedAt
+      LocalLastChangedAt,
+      
+      _ProductText : redirected to composition child zsac_c_product_text,
+      _ProductValuation : redirected to composition child zsac_c_product_valuation
 }

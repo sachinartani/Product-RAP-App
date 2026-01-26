@@ -1,0 +1,41 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: {
+    typeName: 'Description',
+    typeNamePlural: 'Descriptions',
+    title: { type: #STANDARD, value: 'Language' }
+  }
+}
+annotate entity zsac_c_product_text with
+{
+  @UI.facet: [ { id: 'TextDetails', purpose: #STANDARD, type: #IDENTIFICATION_REFERENCE, position: 10 } ]
+
+  @UI.hidden: true
+  ProdTxtUuid;
+  @UI.hidden: true
+  ProductUuid;
+
+  @UI: { lineItem:       [ { position: 10, label: 'Language' } ],
+         identification: [ { position: 10, label: 'Language' } ] }
+  Language;
+
+  @UI: { lineItem:       [ { position: 20, label: 'Description' } ],
+         identification: [ { position: 20, label: 'Description' } ] }
+  Description;
+
+ /* Administrative Data - Usually grouped in a different facet or hidden from main list */
+  @UI.identification: [ { position: 30, label: 'Created By' } ]
+  CreatedBy;
+
+  @UI.identification: [ { position: 40, label: 'Created At' } ]
+  CreatedAt;
+
+  @UI.identification: [ { position: 50, label: 'Last Changed By' } ]
+  LastChangedBy;
+
+  @UI.identification: [ { position: 60, label: 'Last Changed At' } ]
+  LastChangedAt;
+
+  @UI.identification: [ { position: 70, label: 'Local Last Changed At' } ]
+  LocalLastChangedAt;
+}

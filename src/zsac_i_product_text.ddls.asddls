@@ -1,19 +1,16 @@
 @AbapCatalog.viewEnhancementCategory: [#NONE]
 @AccessControl.authorizationCheck: #NOT_REQUIRED
-@EndUserText.label: 'Interface view - Product'
+@EndUserText.label: 'Interface view -  Product Text'
 @Metadata.ignorePropagatedAnnotations: true
-define root view entity ZSAC_R_Product
-  as select from zsac_t_product
-  composition [0..*] of zsac_i_product_text as _ProductText 
-  composition [0..*] of zsac_i_product_valuation as _ProductValuation
+define view entity zsac_i_product_text
+  as select from zsac_t_prod_txt
+  association to parent ZSAC_R_Product as _Product
+    on $projection.ProductUuid = _Product.ProductUuid
 {
-  key product_uuid          as ProductUuid,
-      product_id            as ProductId,
-      material_type         as MaterialType,
-      industry_sector       as IndustrySector,
-      material_group        as MaterialGroup,
-      unit_of_measure       as UnitOfMeasure,
-      currency_code         as CurrencyCode,
+  key prod_txt_uuid         as ProdTxtUuid,
+      product_uuid          as ProductUuid,
+      language              as Language,
+      description           as Description,
       @Semantics.user.createdBy: true
       created_by            as CreatedBy,
       @Semantics.systemDateTime.createdAt: true
@@ -25,6 +22,5 @@ define root view entity ZSAC_R_Product
       @Semantics.systemDateTime.localInstanceLastChangedAt: true
       local_last_changed_at as LocalLastChangedAt,
       
-      _ProductText,
-      _ProductValuation
+      _Product
 }

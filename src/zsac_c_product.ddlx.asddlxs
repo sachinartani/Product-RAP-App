@@ -3,20 +3,36 @@
   headerInfo: {
     typeName: 'Product',
     typeNamePlural: 'Products',
-    title: { type: #STANDARD, value: 'ProductId' },
+    title: { type: #STANDARD, value: 'ProductId' }, // The value attribute is case sensitive and must match the field name
     description: { value: 'MaterialType' }
   }
 }
 annotate entity zsac_c_product with
 {
   @UI.facet: [
-    {
-      id:              'Identification',
-      purpose:         #STANDARD,
-      type:            #IDENTIFICATION_REFERENCE,
-      label:           'Product Details',
-      position:        10
-    }
+      {
+          id:              'Identification',
+          purpose:         #STANDARD,
+          type:            #IDENTIFICATION_REFERENCE,
+          label:           'Product Details',
+          position:        10
+      },
+      {
+          id:            'ProductText',
+          purpose:       #STANDARD,
+          type:          #LINEITEM_REFERENCE,
+          label:         'Product Description',
+          position:      20,
+          targetElement: '_ProductText'
+      },
+      {
+          id:            'ProductValuation',
+          purpose:       #STANDARD,
+          type:          #LINEITEM_REFERENCE,
+          label:         'Product Valuation',
+          position:      30,
+          targetElement: '_ProductValuation'
+      }
   ]
 
   @UI.hidden: true
@@ -40,10 +56,12 @@ annotate entity zsac_c_product with
          identification: [ { position: 40, label: 'Material Group' } ] }
   MaterialGroup;
 
-  @UI: { identification: [ { position: 50, label: 'Base Unit' } ] }
+  @UI: { lineItem:       [ { position: 50, label: 'Base Unit' } ],
+         identification: [ { position: 50, label: 'Base Unit' } ] }
   UnitOfMeasure;
 
-  @UI: { identification: [ { position: 60, label: 'Currency' } ] }
+  @UI: { lineItem:       [ { position: 50, label: 'Currency' } ],
+         identification: [ { position: 60, label: 'Currency' } ] }
   CurrencyCode;
 
   /* Administrative Data - Usually grouped in a different facet or hidden from main list */

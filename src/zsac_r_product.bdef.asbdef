@@ -9,9 +9,13 @@ authorization master ( instance )
   create ( authorization : global );
   update;
   delete;
+
   field ( numbering : managed, readonly ) ProductUuid;
 
   field ( readonly ) CreatedBy, CreatedAt, LastChangedBy, LastChangedAt, LocalLastChangedAt;
+
+  association _ProductText { create; }
+  association _ProductValuation { create; }
 
   mapping for zsac_t_product
     {
@@ -22,6 +26,62 @@ authorization master ( instance )
       MaterialGroup      = material_group;
       UnitOfMeasure      = unit_of_measure;
       CurrencyCode       = currency_code;
+      CreatedBy          = created_by;
+      CreatedAt          = created_at;
+      LastChangedBy      = last_changed_by;
+      LastChangedAt      = last_changed_at;
+      LocalLastChangedAt = local_last_changed_at;
+    }
+}
+
+define behavior for zsac_i_product_text alias ProductText
+persistent table zsac_t_prod_txt
+lock dependent by _Product
+authorization dependent by _Product
+{
+  update;
+  delete;
+  field ( readonly, numbering : managed ) ProdTxtUuid;
+
+  field ( readonly ) ProductUuid, CreatedBy, CreatedAt, LastChangedBy, LastChangedAt, LocalLastChangedAt;
+
+  association _Product;
+
+  mapping for zsac_t_prod_txt
+    {
+      ProdTxtUuid        = prod_txt_uuid;
+      ProductUuid        = product_uuid;
+      Language           = language;
+      Description        = description;
+      CreatedBy          = created_by;
+      CreatedAt          = created_at;
+      LastChangedBy      = last_changed_by;
+      LastChangedAt      = last_changed_at;
+      LocalLastChangedAt = local_last_changed_at;
+    }
+
+}
+
+define behavior for zsac_i_product_valuation alias ProductValuation
+persistent table zsac_t_prod_val
+lock dependent by _Product
+authorization dependent by _Product
+{
+  update;
+  delete;
+  field ( readonly, numbering : managed ) ProdValUuid;
+
+  field ( readonly ) ProductUuid, UnitOfMeasure, CurrencyCode, CreatedBy, CreatedAt, LastChangedBy, LastChangedAt, LocalLastChangedAt;
+
+  association _Product;
+
+  mapping for zsac_t_prod_val
+    {
+      ProdValUuid        = prod_val_uuid;
+      ProductUuid        = product_uuid;
+      ValuationType      = valuation_type;
+      TotalQuantity      = total_quantity;
+      StandardPrice      = standard_price;
       CreatedBy          = created_by;
       CreatedAt          = created_at;
       LastChangedBy      = last_changed_by;

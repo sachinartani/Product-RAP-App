@@ -1,0 +1,52 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: {
+    typeName: 'Valuation',
+    typeNamePlural: 'Valuations',
+    title: { type: #STANDARD, value: 'ValuationType' }
+  }
+}
+annotate entity zsac_c_product_valuation with
+{
+  @UI.facet: [ { id: 'ValuationDetails', purpose: #STANDARD, type: #IDENTIFICATION_REFERENCE, position: 10 } ]
+
+  @UI.hidden: true
+  ProdValUuid;
+  @UI.hidden: true
+  ProductUuid;
+  
+  @UI: { lineItem:       [ { position: 10, label: 'Valuation Type' } ],
+         identification: [ { position: 10, label: 'Valuation Type' } ] }
+  ValuationType;
+
+  @UI: { lineItem:       [ { position: 20, label: 'Stock Quantity' } ],
+         identification: [ { position: 20, label: 'Stock Quantity' } ] }
+  TotalQuantity;
+
+  @UI: { lineItem:       [ { position: 30, label: 'Standard Price' } ],
+         identification: [ { position: 30, label: 'Standard Price' } ] }
+  StandardPrice;
+
+//  @UI.identification: [ { position: 40, label: 'Base Unit' } ]
+//  UnitOfMeasure;
+
+//  @UI.identification: [ { position: 50, label: 'Currency' } ]
+//  CurrencyCode;
+
+  /* Administrative Data - Usually grouped in a different facet or hidden from main list */
+  @UI.identification: [ { position: 60, label: 'Created By' } ]
+  CreatedBy;
+
+  @UI.identification: [ { position: 70, label: 'Created At' } ]
+  CreatedAt;
+
+  @UI.identification: [ { position: 80, label: 'Last Changed By' } ]
+  LastChangedBy;
+
+  @UI.identification: [ { position: 90, label: 'Last Changed At' } ]
+  LastChangedAt;
+
+  @UI.identification: [ { position: 100, label: 'Local Last Changed At' } ]
+  LocalLastChangedAt;
+
+}
