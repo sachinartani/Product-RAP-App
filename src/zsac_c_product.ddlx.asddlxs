@@ -38,8 +38,11 @@ annotate entity zsac_c_product with
   @UI.hidden: true
   ProductUuid;
 
-  @UI: { lineItem:       [ { position: 10, label: 'Product ID' } ],
-         identification: [ { position: 10, label: 'Product ID' } ],
+  @UI: { lineItem:       [ { position: 10, label: 'Product ID' },
+                           { type: #FOR_ACTION, dataAction: 'ResetMaterial', label: 'Reset Product', position: 10 },
+                           { type: #FOR_ACTION, dataAction: 'CreateProduct', label: 'Create Product', position: 20 } ],
+         identification: [ { position: 10, label: 'Product ID' },
+                           { type: #FOR_ACTION, dataAction: 'ResetMaterial', label: 'Reset Product', position: 10 } ],
          selectionField: [ { position: 10 } ] }
   ProductId;
 
@@ -50,6 +53,8 @@ annotate entity zsac_c_product with
 
   @UI: { lineItem:       [ { position: 30, label: 'Industry' } ],
          identification: [ { position: 30, label: 'Industry' } ] }
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZSAC_I_INDUSTRYVH', element: 'Industry' } }]
+  @UI.textArrangement: #TEXT_FIRST
   IndustrySector;
 
   @UI: { lineItem:       [ { position: 40, label: 'Material Group' } ],
@@ -58,10 +63,12 @@ annotate entity zsac_c_product with
 
   @UI: { lineItem:       [ { position: 50, label: 'Base Unit' } ],
          identification: [ { position: 50, label: 'Base Unit' } ] }
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'I_UnitOfMeasure', element: 'UnitOfMeasure' } }]
   UnitOfMeasure;
 
   @UI: { lineItem:       [ { position: 50, label: 'Currency' } ],
          identification: [ { position: 60, label: 'Currency' } ] }
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'I_Currency', element: 'Currency' } }]
   CurrencyCode;
 
   /* Administrative Data - Usually grouped in a different facet or hidden from main list */

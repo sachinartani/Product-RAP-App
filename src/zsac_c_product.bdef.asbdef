@@ -7,6 +7,9 @@ define behavior for zsac_c_product alias Product
   use update;
   use delete;
 
+  use action ResetMaterial;
+  use action CreateProduct;
+
   use association _ProductText { create; }
   use association _ProductValuation { create; }
 }
@@ -23,6 +26,8 @@ define behavior for zsac_c_product_valuation alias ProductValuation
 {
   use update;
   use delete;
+
+  use action AddStocks;
 
   use association _Product;
 }

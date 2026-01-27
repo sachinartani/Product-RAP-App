@@ -10,6 +10,11 @@ authorization master ( instance )
   update;
   delete;
 
+  action ResetMaterial result [1] $self;
+  static factory action ( authorization : global ) CreateProduct parameter ZSAC_A_PRODUCT [1];
+
+  determination setSomeValues on modify { field IndustrySector; }
+
   field ( numbering : managed, readonly ) ProductUuid;
 
   field ( readonly ) CreatedBy, CreatedAt, LastChangedBy, LastChangedAt, LocalLastChangedAt;
@@ -69,9 +74,12 @@ authorization dependent by _Product
 {
   update;
   delete;
+
+  action AddStocks result [1] $self;
+
   field ( readonly, numbering : managed ) ProdValUuid;
 
-  field ( readonly ) ProductUuid, UnitOfMeasure, CurrencyCode, CreatedBy, CreatedAt, LastChangedBy, LastChangedAt, LocalLastChangedAt;
+  field ( readonly ) ProductUuid, CreatedBy, CreatedAt, LastChangedBy, LastChangedAt, LocalLastChangedAt;
 
   association _Product;
 

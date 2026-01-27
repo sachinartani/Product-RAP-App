@@ -17,6 +17,7 @@ annotate entity zsac_c_product_text with
 
   @UI: { lineItem:       [ { position: 10, label: 'Language' } ],
          identification: [ { position: 10, label: 'Language' } ] }
+  @Consumption.valueHelpDefinition: [{ entity: { name:'I_Language', element: 'Language' } }]
   Language;
 
   @UI: { lineItem:       [ { position: 20, label: 'Description' } ],

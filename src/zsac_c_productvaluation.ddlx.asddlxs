@@ -15,7 +15,8 @@ annotate entity zsac_c_product_valuation with
   @UI.hidden: true
   ProductUuid;
   
-  @UI: { lineItem:       [ { position: 10, label: 'Valuation Type' } ],
+  @UI: { lineItem:       [ { position: 10, label: 'Valuation Type' },
+                           { type: #FOR_ACTION, dataAction: 'AddStocks', label: 'Add Stocks', position: 10 } ],
          identification: [ { position: 10, label: 'Valuation Type' } ] }
   ValuationType;
 
