@@ -1,5 +1,7 @@
 projection;
 strict ( 2 );
+//use draft;
+//use side effects;
 
 define behavior for zsac_c_product alias Product
 {
@@ -7,11 +9,20 @@ define behavior for zsac_c_product alias Product
   use update;
   use delete;
 
+  //  use action Edit;
+  //  use action Resume;
+  //  use action Activate;
+  //  use action Discard;
+  //  use action Prepare;
+
   use action ResetMaterial;
   use action CreateProduct;
 
   use association _ProductText { create; }
   use association _ProductValuation { create; }
+  //  use association _ProductText { create; with draft; }
+  //  use association _ProductValuation { create; with draft; }
+
 }
 
 define behavior for zsac_c_product_text alias ProductText
@@ -20,6 +31,7 @@ define behavior for zsac_c_product_text alias ProductText
   use delete;
 
   use association _Product;
+  //  use association _Product { with draft; }
 }
 
 define behavior for zsac_c_product_valuation alias ProductValuation
@@ -30,4 +42,5 @@ define behavior for zsac_c_product_valuation alias ProductValuation
   use action AddStocks;
 
   use association _Product;
+  //  use association _Product { with draft; }
 }

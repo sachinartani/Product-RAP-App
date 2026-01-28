@@ -1,26 +1,46 @@
 managed implementation in class zsac_cl_bp_product unique;
 strict ( 2 );
+//with draft;
 
 define behavior for ZSAC_R_Product alias Product
 persistent table zsac_t_product
-lock master
+//draft table zsac_t_prod_d
+lock master // total etag LastChangeDat
 authorization master ( instance )
+etag master LocalLastChangedAt
 {
-  create ( authorization : global );
-  update;
+  create ( authorization : global, precheck );
+  update ( features : instance );
   delete;
 
+//  draft action Edit;
+//  draft action Resume;
+//  draft action Activate optimized;
+//  draft action Discard;
+//  draft determine action Prepare
+//  {
+//    validation ProductValuation~validateStocks;
+//  }
+
   action ResetMaterial result [1] $self;
-  static factory action ( authorization : global ) CreateProduct parameter ZSAC_A_PRODUCT [1];
+  static factory action ( authorization : global, precheck ) CreateProduct parameter ZSAC_A_PRODUCT [1];
 
   determination setSomeValues on modify { field IndustrySector; }
 
+  //  side effects { field IndustrySector affects field UnitOfMeasure, field CurrencyCode; }
+
   field ( numbering : managed, readonly ) ProductUuid;
+
+  field ( features : instance ) UnitOfMeasure, CurrencyCode;
 
   field ( readonly ) CreatedBy, CreatedAt, LastChangedBy, LastChangedAt, LocalLastChangedAt;
 
-  association _ProductText { create; }
-  association _ProductValuation { create; }
+  field ( readonly : update ) ProductId;
+
+    association _ProductText { create; }
+    association _ProductValuation { create; }
+//  association _ProductText { create; with draft; }
+//  association _ProductValuation { create; with draft; }
 
   mapping for zsac_t_product
     {
@@ -41,6 +61,7 @@ authorization master ( instance )
 
 define behavior for zsac_i_product_text alias ProductText
 persistent table zsac_t_prod_txt
+//draft table zsac_t_prodtxt_d
 lock dependent by _Product
 authorization dependent by _Product
 {
@@ -50,7 +71,8 @@ authorization dependent by _Product
 
   field ( readonly ) ProductUuid, CreatedBy, CreatedAt, LastChangedBy, LastChangedAt, LocalLastChangedAt;
 
-  association _Product;
+    association _Product;
+//  association _Product { with draft; }
 
   mapping for zsac_t_prod_txt
     {
@@ -69,6 +91,7 @@ authorization dependent by _Product
 
 define behavior for zsac_i_product_valuation alias ProductValuation
 persistent table zsac_t_prod_val
+//draft table zsac_t_prodval_d
 lock dependent by _Product
 authorization dependent by _Product
 {
@@ -81,7 +104,10 @@ authorization dependent by _Product
 
   field ( readonly ) ProductUuid, CreatedBy, CreatedAt, LastChangedBy, LastChangedAt, LocalLastChangedAt;
 
-  association _Product;
+  validation validateStocks on save { field TotalQuantity; create; update; }
+
+    association _Product;
+//  association _Product { with draft; }
 
   mapping for zsac_t_prod_val
     {
