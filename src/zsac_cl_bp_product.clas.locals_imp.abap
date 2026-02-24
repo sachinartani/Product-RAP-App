@@ -111,16 +111,27 @@ CLASS lhc_Product IMPLEMENTATION.
     LOOP AT lt_products ASSIGNING FIELD-SYMBOL(<lfs_product>).
       IF update_requested = abap_true.
         IF <lfs_product>-IndustrySector = 'P'.
-          APPEND VALUE #(  %tky = <lfs_product>-%tky ) TO failed-product.
           APPEND VALUE #( %tky = keys[ 1 ]-%tky
                           %msg = new_message_with_text(
-                              severity = if_abap_behv_message=>severity-error
-                              text = 'No Authorization to update product!!!'
-                          )
-          ) TO reported-product.
+                                  severity = if_abap_behv_message=>severity-error
+                                  text = 'No Authorization to update product!!!'
+                                 )
+                        ) TO reported-product.
         ENDIF.
       ENDIF.
     ENDLOOP.
+
+    result = VALUE #( FOR ls_product IN lt_products
+                        ( %tky = ls_product-%tky
+                          %update = COND #( WHEN ls_product-IndustrySector = 'P'
+                                          THEN if_abap_behv=>auth-unauthorized
+                                          ELSE if_abap_behv=>auth-allowed )
+*                          %action-Edit = COND #( WHEN ls_product-IndustrySector = 'P'
+*                                                  THEN if_abap_behv=>auth-unauthorized
+*                                                  ELSE if_abap_behv=>auth-allowed
+*                                               )
+                        )
+                    ).
 
   ENDMETHOD.
 
@@ -129,11 +140,19 @@ CLASS lhc_Product IMPLEMENTATION.
     DATA(create_requested) = COND #( WHEN requested_authorizations-%create = if_abap_behv=>mk-on THEN
                                     abap_true ELSE abap_false ).
 
-* Disable create action after 08:42 AM system time
+* Disable create action after 08:00 AM system time
     IF create_requested = abap_true.
-      IF cl_abap_context_info=>get_system_time( ) > '084200'.
+      IF cl_abap_context_info=>get_system_time( ) > '080000'.
         result-%create = if_abap_behv=>auth-unauthorized.
       ENDIF.
+
+*     Custom message
+      APPEND VALUE #( %msg = new_message_with_text(
+                              severity = if_abap_behv_message=>severity-error
+                              text = 'Create not allowed after 8AM.'
+                           )
+                   ) TO reported-product.
+
     ENDIF.
 
   ENDMETHOD.

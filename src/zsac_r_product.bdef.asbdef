@@ -27,7 +27,7 @@ etag master LocalLastChangedAt
 
   determination setSomeValues on modify { field IndustrySector; }
 
-  //  side effects { field IndustrySector affects field UnitOfMeasure, field CurrencyCode; }
+   side effects { field IndustrySector affects field UnitOfMeasure, field CurrencyCode; }
 
   field ( numbering : managed, readonly ) ProductUuid;
 
