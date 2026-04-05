@@ -43,6 +43,130 @@ CLASS ZSAC_CL_LOAD_DATA IMPLEMENTATION.
     out->write( |{ sy-dbcnt } Industry Sectors inserted successfully.| ).
 
 
+DATA: lt_product TYPE STANDARD TABLE OF zsac_t_product,
+          lt_text    TYPE STANDARD TABLE OF zsac_t_prod_txt,
+          lt_val     TYPE STANDARD TABLE OF zsac_t_prod_val.
+
+
+    DATA: lv_ts TYPE timestampl,
+          lv_uuid TYPE sysuuid_x16.
+
+
+get time STAMP FIELD lv_ts.
+
+    "-----------------------------
+    " Create Products
+    "-----------------------------
+    DO 5 TIMES.
+
+      TRY.
+          lv_uuid = cl_system_uuid=>create_uuid_x16_static( ).
+        CATCH cx_uuid_error.
+          "handle exception
+      ENDTRY.
+
+      APPEND VALUE #(
+        client            = sy-mandt
+        product_uuid      = lv_uuid
+        product_id        = |MAT{ sy-index }|
+        material_type     = 'FERT'
+        industry_sector   = 'M'
+        material_group    = 'GRP1'
+        unit_of_measure   = 'EA'
+        currency_code     = 'INR'
+        created_by        = sy-uname
+        created_at        = lv_ts
+        last_changed_by   = sy-uname
+        last_changed_at   = lv_ts
+        local_last_changed_at = lv_ts
+      ) TO lt_product.
+
+      "-----------------------------
+      " Product Texts (2 per product)
+      "-----------------------------
+      TRY.
+          APPEND VALUE #(
+            client       = sy-mandt
+            prod_txt_uuid = cl_system_uuid=>create_uuid_x16_static( )
+            product_uuid = lv_uuid
+            language     = 'E'
+            description  = |Product { sy-index } - English|
+            created_by   = sy-uname
+            created_at   = lv_ts
+            last_changed_by = sy-uname
+            last_changed_at = lv_ts
+            local_last_changed_at = lv_ts
+          ) TO lt_text.
+        CATCH cx_uuid_error.
+          "handle exception
+      ENDTRY.
+
+      TRY.
+          APPEND VALUE #(
+            client       = sy-mandt
+            prod_txt_uuid = cl_system_uuid=>create_uuid_x16_static( )
+            product_uuid = lv_uuid
+            language     = 'D'
+            description  = |Product { sy-index } - German|
+            created_by   = sy-uname
+            created_at   = lv_ts
+            last_changed_by = sy-uname
+            last_changed_at = lv_ts
+            local_last_changed_at = lv_ts
+          ) TO lt_text.
+        CATCH cx_uuid_error.
+          "handle exception
+      ENDTRY.
+
+      "-----------------------------
+      " Product Valuations (2 per product)
+      "-----------------------------
+      TRY.
+          APPEND VALUE #(
+            client        = sy-mandt
+            prod_val_uuid = cl_system_uuid=>create_uuid_x16_static( )
+            product_uuid  = lv_uuid
+            valuation_type = 'STD'
+            total_quantity = 100 * sy-index
+            standard_price = 500 * sy-index
+            created_by     = sy-uname
+            created_at     = lv_ts
+            last_changed_by = sy-uname
+            last_changed_at = lv_ts
+            local_last_changed_at = lv_ts
+          ) TO lt_val.
+        CATCH cx_uuid_error.
+          "handle exception
+      ENDTRY.
+
+      TRY.
+          APPEND VALUE #(
+            client        = sy-mandt
+            prod_val_uuid = cl_system_uuid=>create_uuid_x16_static( )
+            product_uuid  = lv_uuid
+            valuation_type = 'MOV'
+            total_quantity = 50 * sy-index
+            standard_price = 450 * sy-index
+            created_by     = sy-uname
+            created_at     = lv_ts
+            last_changed_by = sy-uname
+            last_changed_at = lv_ts
+            local_last_changed_at = lv_ts
+          ) TO lt_val.
+        CATCH cx_uuid_error.
+          "handle exception
+      ENDTRY.
+
+    ENDDO.
+
+    "-----------------------------
+    " Insert into DB
+    "-----------------------------
+    INSERT zsac_t_product FROM TABLE @lt_product.
+    INSERT zsac_t_prod_txt FROM TABLE @lt_text.
+    INSERT zsac_t_prod_val FROM TABLE @lt_val.
+
+    out->write( |Inserted { lines( lt_product ) } products with texts and valuations| ).
 
 * Working example of Service Consumption using OData V4 Client Proxy
 *    TYPES: BEGIN OF tys_alphabetical_list_of_produ,
