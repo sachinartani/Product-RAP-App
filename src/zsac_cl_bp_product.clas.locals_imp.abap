@@ -48,12 +48,12 @@ CLASS lhc_productvaluation IMPLEMENTATION.
 
   METHOD validateStocks.
 
+* Validate that if stock is entered, price cannot be empty
     READ ENTITIES OF zsac_r_product IN LOCAL MODE
           ENTITY ProductValuation
           FIELDS ( TotalQuantity StandardPrice ) WITH CORRESPONDING #( keys )
           RESULT DATA(lt_product_valuation).
 
-* Validate that if stock is entered, price cannot be empty
     LOOP AT lt_product_valuation INTO DATA(ls_prod_val).
       IF ls_prod_val-TotalQuantity IS NOT INITIAL AND ls_prod_val-StandardPrice IS INITIAL.
         APPEND VALUE #( %tky = ls_prod_val-%tky ) TO failed-productvaluation.
@@ -62,6 +62,23 @@ CLASS lhc_productvaluation IMPLEMENTATION.
                         %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
                                                       text = 'Price cannot be empty if stock is entered' )
                        ) TO reported-productvaluation.
+      ENDIF.
+    ENDLOOP.
+
+* Validate that currency must not be empty if stock details are entered
+    READ ENTITIES OF zsac_r_product IN LOCAL MODE
+          ENTITY ProductValuation
+          BY \_Product
+          FIELDS ( CurrencyCode ) WITH CORRESPONDING #( keys )
+          RESULT DATA(lt_product).
+
+    LOOP AT lt_product INTO DATA(ls_product).
+      IF lt_product_valuation IS NOT INITIAL AND ls_product-CurrencyCode IS INITIAL.
+        APPEND VALUE #( %tky = ls_product-%tky ) TO failed-product.
+        APPEND VALUE #( %tky = ls_product-%tky
+                        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
+                                                      text = 'Currency code cannot be empty' )
+                       ) TO reported-product.
       ENDIF.
     ENDLOOP.
 
@@ -293,15 +310,15 @@ CLASS lhc_Product IMPLEMENTATION.
     result =
         VALUE #( FOR ls_product IN lt_products
           ( %key = ls_product-%key
-            %features-%field-UnitOfMeasure = COND #( WHEN ls_product-MaterialType = 'FERT' AND ls_product-IndustrySector IS NOT INITIAL
+            %features-%field-UnitOfMeasure = COND #( WHEN ls_product-MaterialType = 'HAWA' AND ls_product-IndustrySector IS NOT INITIAL
                                                           THEN if_abap_behv=>fc-f-read_only
                                                           ELSE if_abap_behv=>fc-f-unrestricted )
             %features-%field-CurrencyCode = COND #( WHEN ls_product-MaterialType = 'FERT' AND ls_product-IndustrySector IS NOT INITIAL
                                                           THEN if_abap_behv=>fc-f-read_only
                                                           ELSE if_abap_behv=>fc-f-unrestricted )
-            %features-%update = COND #( WHEN ls_product-MaterialGroup IS NOT INITIAL
-                                          THEN if_abap_behv=>fc-o-disabled
-                                          ELSE if_abap_behv=>fc-o-enabled )
+*            %features-%update = COND #( WHEN ls_product-MaterialGroup IS NOT INITIAL
+*                                          THEN if_abap_behv=>fc-o-disabled
+*                                          ELSE if_abap_behv=>fc-o-enabled )
            ) ).
 
   ENDMETHOD.
