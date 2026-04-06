@@ -154,23 +154,23 @@ CLASS lhc_Product IMPLEMENTATION.
 
   METHOD get_global_authorizations.
 
-    DATA(create_requested) = COND #( WHEN requested_authorizations-%create = if_abap_behv=>mk-on THEN
-                                    abap_true ELSE abap_false ).
-
-* Disable create action after 08:00 AM system time
-    IF create_requested = abap_true.
-      IF cl_abap_context_info=>get_system_time( ) > '080000'.
-        result-%create = if_abap_behv=>auth-unauthorized.
-      ENDIF.
-
-*     Custom message
-      APPEND VALUE #( %msg = new_message_with_text(
-                              severity = if_abap_behv_message=>severity-error
-                              text = 'Create not allowed after 8AM.'
-                           )
-                   ) TO reported-product.
-
-    ENDIF.
+*    DATA(create_requested) = COND #( WHEN requested_authorizations-%create = if_abap_behv=>mk-on THEN
+*                                    abap_true ELSE abap_false ).
+*
+** Disable create action after 08:00 AM system time
+*    IF create_requested = abap_true.
+*      IF cl_abap_context_info=>get_system_time( ) > '080000'.
+*        result-%create = if_abap_behv=>auth-unauthorized.
+*      ENDIF.
+*
+**     Custom message
+*      APPEND VALUE #( %msg = new_message_with_text(
+*                              severity = if_abap_behv_message=>severity-error
+*                              text = 'Create not allowed after 8AM.'
+*                           )
+*                   ) TO reported-product.
+*
+*    ENDIF.
 
   ENDMETHOD.
 
@@ -284,16 +284,16 @@ CLASS lhc_Product IMPLEMENTATION.
     ENDIF.
 
 * Validate if Industry Sector is entered, unit of measure and currency code cannot be empty
-    IF ls_entity-IndustrySector IS NOT INITIAL
-    AND ( ls_entity-UnitOfMeasure IS INITIAL OR ls_entity-CurrencyCode IS INITIAL ).
-      APPEND VALUE #(  %key = ls_entity-%key ) TO failed-product.
-      APPEND VALUE #(  %key = ls_entity-%key
-                       %msg      = new_message_with_text(
-                         severity = if_abap_behv_message=>severity-error
-                         text     = 'Unit of measure and currency code cannot be empty.' )
-                       %element-IndustrySector = if_abap_behv=>mk-on
-                    ) TO reported-product.
-    ENDIF.
+*    IF ls_entity-IndustrySector IS NOT INITIAL
+*    AND ( ls_entity-UnitOfMeasure IS INITIAL OR ls_entity-CurrencyCode IS INITIAL ).
+*      APPEND VALUE #(  %key = ls_entity-%key ) TO failed-product.
+*      APPEND VALUE #(  %key = ls_entity-%key
+*                       %msg      = new_message_with_text(
+*                         severity = if_abap_behv_message=>severity-error
+*                         text     = 'Unit of measure and currency code cannot be empty.' )
+*                       %element-IndustrySector = if_abap_behv=>mk-on
+*                    ) TO reported-product.
+*    ENDIF.
 
   ENDMETHOD.
 
